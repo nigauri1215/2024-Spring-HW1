@@ -15,6 +15,8 @@ interface IERC20 {
 
 contract LiaoToken is IERC20 {
     // TODO: you might need to declare several state variable here
+    
+    mapping(address => mapping(address => uint256)) private _allowances;
     mapping(address account => uint256) private _balances;
     mapping(address account => bool) isClaim;
 
@@ -60,17 +62,45 @@ contract LiaoToken is IERC20 {
 
     function transfer(address to, uint256 amount) external returns (bool) {
         // TODO: please add your implementaiton here
+        _transfer(msg.sender, to, amount);
+        return true;
     }
 
     function transferFrom(address from, address to, uint256 value) external returns (bool) {
         // TODO: please add your implementaiton here
+        uint256 allow = _allowances[from][msg.sender];
+        require(allow >= value, "ERC20: transfer amount exceeds allowance");
+        _transfer(from, to, value);
+        _approve(from, msg.sender, allow - value);
+        return true;
     }
 
     function approve(address spender, uint256 amount) external returns (bool) {
         // TODO: please add your implementaiton here
+        _approve(msg.sender, spender, amount);
+        return true;
     }
 
     function allowance(address owner, address spender) public view returns (uint256) {
         // TODO: please add your implementaiton here
+        return _allowances[owner][spender];
+    }
+    function _transfer(address sender, address recipient, uint256 amount) internal {
+        require(sender != address(0), "ERC20: transfer from the zero address");
+        require(recipient != address(0), "ERC20: transfer to the zero address");
+        require(_balances[sender] >= amount, "ERC20: transfer amount exceeds balance");
+        
+        _balances[sender] -= amount;
+        _balances[recipient] += amount;
+        emit Transfer(sender, recipient, amount);
+    }
+
+    function _approve(address owner, address spender, uint256 amount) internal {
+        require(owner != address(0), "ERC20: approve from the zero address");
+        require(spender != address(0), "ERC20: approve to the zero address");
+
+        _allowances[owner][spender] = amount;
+        emit Approval(owner, spender, amount);
     }
 }
+    

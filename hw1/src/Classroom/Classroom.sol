@@ -3,10 +3,11 @@ pragma solidity ^0.8.0;
 
 /* Problem 1 Interface & Contract */
 contract StudentV1 {
-    // Note: You can declare some state variable
+    uint256 private studentCode;
 
     function register() external returns (uint256) {
-        // TODO: please add your implementaiton here
+        studentCode = 123;
+        return studentCode;
     }
 }
 
@@ -15,15 +16,23 @@ interface IClassroomV2 {
     function isEnrolled() external view returns (bool);
 }
 
-contract StudentV2 {
+contract StudentV2 is IClassroomV2 {
+    uint256 private studentCode;
+
     function register() external view returns (uint256) {
-        // TODO: please add your implementaiton here
+        return studentCode;
+    }
+
+    function isEnrolled() external view returns (bool) {
+        return true;
     }
 }
 
 /* Problem 3 Interface & Contract */
 contract StudentV3 {
+    uint256 private studentCode;
+
     function register() external view returns (uint256) {
-        // TODO: please add your implementaiton here
+        return studentCode;
     }
 }
