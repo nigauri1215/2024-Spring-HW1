@@ -1,38 +1,46 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+import {ClassroomV2,ClassroomTest} from "../../test/Classroom/Classroom.t.sol";
 
 /* Problem 1 Interface & Contract */
 contract StudentV1 {
     uint256 private studentCode;
+    bool public Enrolled;
+    
 
     function register() external returns (uint256) {
-        studentCode = 123;
-        return studentCode;
+        if(!Enrolled){
+            Enrolled=true;
+            return 1000;
+        }
+        else{
+            return 123;
+        }
     }
 }
 
-/* Problem 2 Interface & Contract */
+/* StudentV2 Contract */
 interface IClassroomV2 {
     function isEnrolled() external view returns (bool);
 }
-
-contract StudentV2 is IClassroomV2 {
-    uint256 private studentCode;
-
-    function register() external view returns (uint256) {
-        return studentCode;
-    }
-
-    function isEnrolled() external view returns (bool) {
-        return true;
+contract StudentV2 {
+    
+    function register() external returns (uint256) {
+        if(!IClassroomV2().isEnrolled()){
+            return 1000;
+        }
+        else{
+            return 123;
+        }
     }
 }
 
-/* Problem 3 Interface & Contract */
+/* StudentV3 Contract */
 contract StudentV3 {
     uint256 private studentCode;
 
-    function register() external view returns (uint256) {
+    function register() external returns (uint256) {
+        studentCode = 1000;
         return studentCode;
     }
 }
