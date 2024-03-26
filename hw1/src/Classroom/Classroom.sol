@@ -26,7 +26,7 @@ interface IClassroomV2 {
 contract StudentV2 {
     
     function register() external returns (uint256) {
-        if(!IClassroomV2().isEnrolled()){
+        if(!IClassroomV2(msg.sender).isEnrolled()){
             return 1000;
         }
         else{
